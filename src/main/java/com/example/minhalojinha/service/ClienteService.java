@@ -1,10 +1,14 @@
 package com.example.minhalojinha.service;
 
+import com.example.minhalojinha.config.AppConfig;
+import com.example.minhalojinha.controller.CargoController;
 import com.example.minhalojinha.exceptions.BadResourceException;
 import com.example.minhalojinha.exceptions.ResourceAlreadyExistsException;
 import com.example.minhalojinha.exceptions.ResourceNotFoundException;
 import com.example.minhalojinha.model.entity.Cliente;
 import com.example.minhalojinha.repository.ClienteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +19,7 @@ import java.lang.module.ResolutionException;
 
 @Service
 public class ClienteService {
+    public static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -42,16 +47,17 @@ public class ClienteService {
     }
 
     public Cliente saveCliente(Cliente cliente) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(cliente.getNome())) {
-            if (cliente.getId() != null && existsById(cliente.getId())) {
-                throw new ResourceAlreadyExistsException("O cliente " + cliente.getId() + " não foi encontrado");
-            }
-            return clienteRepository.save(cliente);
+        if (cliente != null) {
+            cliente.setSenha(AppConfig.passwordEncoder().encode(cliente.getSenha()));
+            clienteRepository.save(cliente);
+
+            logger.info("Cliente " + cliente.getId() + " salvo com sucesso!");
         } else {
             BadResourceException badResourceException = new BadResourceException("Erro ao salvar o cliente");
             badResourceException.addErrorMessage("O cliente está vazio ou é nulo");
             throw badResourceException;
         }
+        return cliente;
     }
 
     public void updateCliente(Cliente cliente) throws BadResourceException, ResourceNotFoundException {

@@ -1,10 +1,14 @@
 package com.example.minhalojinha.service;
 
+import com.example.minhalojinha.config.AppConfig;
 import com.example.minhalojinha.exceptions.BadResourceException;
 import com.example.minhalojinha.exceptions.ResourceAlreadyExistsException;
 import com.example.minhalojinha.exceptions.ResourceNotFoundException;
+import com.example.minhalojinha.model.entity.CargoFuncionario;
 import com.example.minhalojinha.model.entity.Funcionario;
 import com.example.minhalojinha.repository.FuncionarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +18,14 @@ import org.springframework.util.StringUtils;
 import java.lang.module.ResolutionException;
 
 @Service
-public class FuncionarioService {
+public class FuncionarioService extends CargoFuncionarioService {
+    public static final Logger logger = LoggerFactory.getLogger(FuncionarioService.class);
+
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private CargoService cargoService;
 
     private Boolean existsById(Long id) {
         return funcionarioRepository.existsById(id);
@@ -41,16 +50,24 @@ public class FuncionarioService {
     }
 
     public Funcionario saveFuncionario(Funcionario funcionario) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(funcionario.getNome())) {
-            if (funcionario.getId() != null && existsById(funcionario.getId())) {
-                throw new ResourceAlreadyExistsException("O funcionario " + funcionario.getId() + " não foi encontrado");
+        if (funcionario != null) {
+            funcionario.setSenha(AppConfig.passwordEncoder().encode(funcionario.getSenha()));
+
+            Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
+            logger.info("Funcionario " + funcionario.getId() + " salvo com sucesso!");
+
+            for (CargoFuncionario cargo : funcionarioSalvo.getCargoFuncionario()) {
+                cargo.setFuncionario(funcionario);
+                cargo.setCargo(cargoService.findById(cargo.getId()));
+                salvarCargoFuncionario(cargo);
             }
-            return funcionarioRepository.save(funcionario);
+            logger.info("O(s) cargo(s) do funcionario " + funcionario.getId() + " foi salvo com sucesso!");
         } else {
-            BadResourceException badResourceException = new BadResourceException("Erro ao salvar o funcionario");
-            badResourceException.addErrorMessage("Funcionario está vazio ou é nulo");
+            BadResourceException badResourceException = new BadResourceException("Erro ao salvar o cargo!");
+            badResourceException.addErrorMessage("O Cargo está vazio ou é nulo");
             throw badResourceException;
         }
+        return funcionario;
     }
 
     public void updateFuncionario(Funcionario funcionario) throws BadResourceException, ResourceNotFoundException {
