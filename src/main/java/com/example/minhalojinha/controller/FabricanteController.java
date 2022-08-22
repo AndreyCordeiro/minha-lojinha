@@ -3,11 +3,11 @@ package com.example.minhalojinha.controller;
 import com.example.minhalojinha.exceptions.BadResourceException;
 import com.example.minhalojinha.exceptions.ResourceAlreadyExistsException;
 import com.example.minhalojinha.exceptions.ResourceNotFoundException;
-import com.example.minhalojinha.model.entity.Fabricante;
-import com.example.minhalojinha.service.FabricanteService;
+import com.example.minhalojinha.model.Fabricante;
+import com.example.minhalojinha.service.fabricante.FabricanteService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,12 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class FabricanteController {
 
     public static final Logger logger = LoggerFactory.getLogger(FabricanteController.class);
 
-    @Autowired
-    private FabricanteService fabricanteService;
+    private final FabricanteService fabricanteService;
 
     @GetMapping(value = "/fabricante", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)

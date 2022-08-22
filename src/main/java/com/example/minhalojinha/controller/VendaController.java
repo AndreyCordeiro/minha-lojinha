@@ -1,13 +1,14 @@
 package com.example.minhalojinha.controller;
 
+import com.example.minhalojinha.dto.VendaDTO;
 import com.example.minhalojinha.exceptions.BadResourceException;
 import com.example.minhalojinha.exceptions.ResourceAlreadyExistsException;
 import com.example.minhalojinha.exceptions.ResourceNotFoundException;
-import com.example.minhalojinha.model.entity.Venda;
-import com.example.minhalojinha.service.VendaService;
+import com.example.minhalojinha.model.Venda;
+import com.example.minhalojinha.service.venda.VendaService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,17 +23,17 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class VendaController {
     public static final Logger logger = LoggerFactory.getLogger(VendaController.class);
 
-    @Autowired
     private VendaService vendaService;
 
     @GetMapping(value = "/venda", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Venda>> findAll(@RequestBody(required = false) String nome, Pageable pageable) {
+    public ResponseEntity<Page<VendaDTO>> findAll(@RequestBody(required = false) String nome, Pageable pageable) {
         if (StringUtils.isEmpty(nome)) {
-            return ResponseEntity.ok(vendaService.findAll(pageable));
+            return ResponseEntity.ok(new VendaDTO().convertVenda(vendaService.findAll(pageable)));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

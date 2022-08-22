@@ -1,6 +1,6 @@
 package com.example.minhalojinha.dto;
 
-import com.example.minhalojinha.model.entity.Funcionario;
+import com.example.minhalojinha.model.Funcionario;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
