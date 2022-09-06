@@ -1,13 +1,16 @@
-package com.example.minhalojinha.model;
+package com.example.minhalojinha.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "marca")
+@Table(name = "categoria")
+@Builder
 @Data
-public class Marca extends Auditavel {
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Categoria extends Auditavel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -1,6 +1,6 @@
-package com.example.minhalojinha.model;
+package com.example.minhalojinha.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,7 +8,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "venda")
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Venda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +22,10 @@ public class Venda {
     private Date dataVenda = new Date();
 
     @ManyToOne
-    private Funcionario funcionario;
+    private Usuario usuario;
 
     @ManyToOne
-    private Pessoa pessoa;
+    private Cliente cliente;
 
     @Transient
     private List<ItensVenda> itensVenda;

@@ -1,4 +1,4 @@
-package com.example.minhalojinha.model;
+package com.example.minhalojinha.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

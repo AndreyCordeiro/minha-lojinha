@@ -1,13 +1,17 @@
-package com.example.minhalojinha.model;
+package com.example.minhalojinha.entity;
 
-import lombok.Data;
+import com.example.minhalojinha.enums.TipoUsuario;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "usuario")
+@Builder
 @Data
-public class Pessoa extends Auditavel {
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Usuario extends Auditavel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -16,14 +20,18 @@ public class Pessoa extends Auditavel {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "cpf")
-    private String cpf;
+    @Column(name = "documento")
+    private String documento;
 
     @Column(name = "endereco")
     private String endereco;
 
     @Column(name = "cep")
     private String cep;
+
+    @Column(name = "tipo_usuario")
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipoUsuario;
 
     @Column(name = "email")
     private String email;
