@@ -1,7 +1,10 @@
 package com.example.minhalojinha.controller;
 
-import com.example.minhalojinha.model.Produto;
+import com.example.minhalojinha.entity.Produto;
+import com.example.minhalojinha.exceptions.InfoException;
 import com.example.minhalojinha.service.produto.ProdutoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,27 +15,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/produto")
 @RequiredArgsConstructor
+@Tag(name = "Produto", description = "API de Produto")
 public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    @GetMapping("/")
+    @GetMapping("")
+    @Operation(summary = "Buscar Produtos", description = "Busca todos os Produtos cadastrados")
     public List<Produto> buscarTodos() {
         return produtoService.buscarTodos();
     }
 
-    @PostMapping("/")
-    public Produto inserir(@RequestBody Produto objeto) {
-        return produtoService.inserir(objeto);
+    @PostMapping("/cadastrar")
+    @Operation(summary = "Cadastrar Produto", description = "Cadastra um Produto")
+    public Produto inserir(@RequestBody Produto produto) throws InfoException {
+        return produtoService.inserir(produto);
     }
 
-    @PutMapping("/")
-    public Produto alterar(@RequestBody Produto objeto) {
-        return produtoService.alterar(objeto);
+    @PutMapping("/atualizar/{id}")
+    @Operation(summary = "Alterar Produto", description = "Altera um Produto em específico")
+    public Produto alterar(@PathVariable("id") Long id, @RequestBody Produto produto) throws InfoException {
+        return produtoService.alterar(id, produto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
+    @DeleteMapping("/deletar/{id}")
+    @Operation(summary = "Deletar Produto", description = "Exclui um Produto em específico")
+    public ResponseEntity<Void> excluir(@PathVariable("id") Long id) throws InfoException {
         produtoService.excluir(id);
         return ResponseEntity.ok().build();
     }

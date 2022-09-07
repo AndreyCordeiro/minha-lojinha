@@ -1,22 +1,15 @@
 package com.example.minhalojinha.service.venda;
 
-import com.example.minhalojinha.exceptions.BadResourceException;
-import com.example.minhalojinha.exceptions.ResourceAlreadyExistsException;
-import com.example.minhalojinha.exceptions.ResourceNotFoundException;
-import com.example.minhalojinha.model.Venda;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.minhalojinha.dto.VendaDTO;
+import com.example.minhalojinha.entity.Venda;
+import com.example.minhalojinha.exceptions.InfoException;
+
+import java.util.List;
 
 public interface VendaService {
-    Boolean existsById(Long id);
+    List<VendaDTO> buscarTodos();
 
-    Venda findById(Long id);
+    VendaDTO inserir(Venda venda) throws InfoException;
 
-    Page<Venda> findAll(Pageable pageable);
-
-    Venda salvarVenda(Venda venda) throws BadResourceException, ResourceAlreadyExistsException;
-
-    void deleteById(Long id) throws ResourceNotFoundException;
-
-    Long count();
+    void excluir(Long id) throws InfoException;
 }

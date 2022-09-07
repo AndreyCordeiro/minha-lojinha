@@ -1,6 +1,6 @@
 package com.example.minhalojinha.repository;
 
-import com.example.minhalojinha.model.Categoria;
+import com.example.minhalojinha.entity.Categoria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

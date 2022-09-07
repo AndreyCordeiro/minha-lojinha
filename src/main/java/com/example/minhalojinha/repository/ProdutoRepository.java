@@ -1,6 +1,6 @@
 package com.example.minhalojinha.repository;
 
-import com.example.minhalojinha.model.Produto;
+import com.example.minhalojinha.entity.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
