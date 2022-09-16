@@ -30,6 +30,7 @@ public class UtilUsuario {
 
     public static UsuarioDTO converteUsuario(Usuario usuario) {
         return UsuarioDTO.builder()
+                .id(usuario.getId())
                 .nome(usuario.getNome())
                 .documento(usuario.getDocumento())
                 .endereco(usuario.getEndereco())

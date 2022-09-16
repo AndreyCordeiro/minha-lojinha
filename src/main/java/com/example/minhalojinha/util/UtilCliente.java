@@ -30,6 +30,7 @@ public class UtilCliente {
 
     public static ClienteDTO converteCliente(Cliente cliente) {
         return ClienteDTO.builder()
+                .id(cliente.getId())
                 .nome(cliente.getNome())
                 .documento(cliente.getDocumento())
                 .endereco(cliente.getEndereco())

@@ -27,6 +27,7 @@ public class UtilProduto {
 
     public static ProdutoDTO converterProduto(Produto produto) {
         return ProdutoDTO.builder()
+                .id(produto.getId())
                 .nome(produto.getNome())
                 .descricao(produto.getDescricao())
                 .valorCusto(produto.getValorCusto())

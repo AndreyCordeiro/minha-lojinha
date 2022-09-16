@@ -18,6 +18,7 @@ public class UtilItensVenda {
 
     public static ItensVendaDTO converteItensVenda(ItensVenda itensVenda) {
         return ItensVendaDTO.builder()
+                .idVenda(itensVenda.getVenda().getId())
                 .quantidade(itensVenda.getQuantidade())
                 .valorUnitario(itensVenda.getValorUnitario())
                 .produto(UtilProduto.converterProduto(itensVenda.getProduto()))
