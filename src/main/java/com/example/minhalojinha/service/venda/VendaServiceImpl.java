@@ -5,6 +5,7 @@ import com.example.minhalojinha.entity.ItensVenda;
 import com.example.minhalojinha.entity.Produto;
 import com.example.minhalojinha.entity.Venda;
 import com.example.minhalojinha.exceptions.InfoException;
+import com.example.minhalojinha.repository.ItensVendaRepository;
 import com.example.minhalojinha.repository.ProdutoRepository;
 import com.example.minhalojinha.repository.VendaRepository;
 import com.example.minhalojinha.service.itensVenda.ItensVendaServiceImpl;
@@ -27,6 +28,8 @@ public class VendaServiceImpl extends ItensVendaServiceImpl implements VendaServ
 
     private final ProdutoRepository produtoRepository;
 
+    private final ItensVendaRepository itensVendaRepository;
+
     @Override
     public List<VendaDTO> buscarTodos() {
         List<Venda> listaVendas = vendaRepository.findAll();
@@ -34,6 +37,12 @@ public class VendaServiceImpl extends ItensVendaServiceImpl implements VendaServ
         List<VendaDTO> vendaDTOList = new ArrayList<>();
         if (listaVendas.size() > 0) {
             for (Venda venda : listaVendas) {
+                List<ItensVenda> itensVendaList = itensVendaRepository.findItensVendasByVendaId(venda.getId());
+
+                if (itensVendaList != null && itensVendaList.size() > 0) {
+                    List<ItensVenda> listaItens = new ArrayList<>(itensVendaList);
+                    venda.setItensVenda(listaItens);
+                }
                 vendaDTOList.add(UtilVenda.converteVenda(venda));
             }
         }
